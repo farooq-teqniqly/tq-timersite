@@ -14,6 +14,18 @@ export function hideElement(element) {
   element.classList.add("d-none");
 }
 
+export function toggleClass(element, className) {
+  if (!(element instanceof Element)) {
+    throw new TypeError("Parameter must be a DOM element.");
+  }
+
+  if (typeof className !== "string") {
+    throw new TypeError("Second argument must be a string.");
+  }
+
+  element.classList.toggle(className);
+}
+
 export function formatTime(seconds) {
   if (typeof seconds !== "number") {
     throw new TypeError("Seconds must be a number.");
