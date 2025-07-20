@@ -1,3 +1,5 @@
+import { constants } from "./constants.js";
+
 export function showElement(element) {
   if (!(element instanceof Element)) {
     throw new TypeError("Parameter must be a DOM element.");
@@ -12,6 +14,22 @@ export function hideElement(element) {
   }
 
   element.classList.add("d-none");
+}
+
+export function enableElement(element) {
+  if (!(element instanceof Element)) {
+    throw new TypeError("Parameter must be a DOM element.");
+  }
+
+  element.disabled = false;
+}
+
+export function disableElement(element) {
+  if (!(element instanceof Element)) {
+    throw new TypeError("Parameter must be a DOM element.");
+  }
+
+  element.disabled = true;
 }
 
 export function toggleClass(element, className) {
@@ -43,11 +61,9 @@ export function formatTime(seconds) {
     throw new RangeError("Seconds cannot be less than zero.");
   }
 
-  const SECONDS_IN_HOUR = 3600;
-  const SECONDS_IN_MINUTE = 60;
-
   const pad = (num) => String(num).padStart(2, "0");
 
+  const { SECONDS_IN_HOUR, SECONDS_IN_MINUTE } = constants;
   const hours = Math.floor(seconds / SECONDS_IN_HOUR);
   const minutes = Math.floor((seconds % SECONDS_IN_HOUR) / SECONDS_IN_MINUTE);
   const displaySeconds = seconds % SECONDS_IN_MINUTE;
