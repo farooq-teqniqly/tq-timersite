@@ -1,5 +1,6 @@
 import { formatTime, toggleClass } from "./utils.js";
 import { TimerUIContext, StoppedState, RunningState, PausedState } from "./state.js";
+import { constants } from "./constants.js";
 
 export class Timer {
   constructor({ display, buttons, inputs }) {
@@ -20,17 +21,19 @@ export class Timer {
 
     const parseAndClamp = (value, max) => Math.min(parseInt(value, 10) || 0, max);
 
-    const hours = parseAndClamp(hoursInput.value, 5);
+    const { SECONDS_IN_HOUR, SECONDS_IN_MINUTE, MAX_HOURS, INITIAL_DURATION } = constants;
+
+    const hours = parseAndClamp(hoursInput.value, MAX_HOURS);
     const minutes = parseAndClamp(minutesInput.value, 59);
     const seconds = parseAndClamp(secondsInput.value, 59);
 
-    let total = hours * 3600 + minutes * 60 + seconds;
+    let total = hours * SECONDS_IN_HOUR + minutes * SECONDS_IN_MINUTE + seconds;
 
     if (total === 0) {
-      total = 30;
+      total = INITIAL_DURATION;
     }
 
-    this.originalDuration = Math.min(total, 5 * 3600);
+    this.originalDuration = Math.min(total, MAX_HOURS * SECONDS_IN_HOUR);
     this.remainingTime = this.originalDuration;
     this.updateDisplay();
   }
@@ -55,7 +58,7 @@ export class Timer {
         toggleClass(this.display, "text-secondary");
         this.ui.transitionTo(StoppedState);
       }
-    }, 1000);
+    }, constants.TIMER_INTERVAL);
 
     this.ui.transitionTo(RunningState);
   }
