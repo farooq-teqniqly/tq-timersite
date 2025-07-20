@@ -1,4 +1,4 @@
-import { formatTime } from "./utils.js";
+import { formatTime, toggleClass } from "./utils.js";
 import { TimerUIContext, StoppedState, RunningState, PausedState } from "./state.js";
 
 export class Timer {
@@ -37,7 +37,8 @@ export class Timer {
 
   start() {
     if (this.remainingTime <= 0) {
-      return;
+      toggleClass(this.display, "text-secondary");
+      this.setInitialDuration();
     }
 
     this.interval = setInterval(() => {
@@ -47,6 +48,7 @@ export class Timer {
       if (this.remainingTime <= 0) {
         clearInterval(this.interval);
         this.interval = null;
+        toggleClass(this.display, "text-secondary");
         this.ui.transitionTo(StoppedState);
       }
     }, 1000);
