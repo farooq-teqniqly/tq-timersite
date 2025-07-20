@@ -1,4 +1,4 @@
-import { hideElement, showElement } from "./utils.js";
+import { hideElement, showElement, enableElement, disableElement } from "./utils.js";
 
 export class TimerState {
   constructor(context) {
@@ -68,9 +68,9 @@ export class StoppedState extends TimerState {
     hideElement(this.buttons.pauseButton);
     hideElement(this.buttons.resetButton);
 
-    this.inputs.hoursInput.disabled = false;
-    this.inputs.minutesInput.disabled = false;
-    this.inputs.secondsInput.disabled = false;
+    enableElement(this.inputs.hoursInput);
+    enableElement(this.inputs.minutesInput);
+    enableElement(this.inputs.secondsInput);
   }
 }
 
@@ -86,9 +86,9 @@ export class RunningState extends TimerState {
     showElement(this.buttons.pauseButton);
     showElement(this.buttons.resetButton);
 
-    this.inputs.hoursInput.disabled = true;
-    this.inputs.minutesInput.disabled = true;
-    this.inputs.secondsInput.disabled = true;
+    disableElement(this.inputs.hoursInput);
+    disableElement(this.inputs.minutesInput);
+    disableElement(this.inputs.secondsInput);
   }
 }
 
@@ -104,9 +104,9 @@ export class PausedState extends TimerState {
     hideElement(this.buttons.pauseButton);
     showElement(this.buttons.resetButton);
 
-    this.inputs.hoursInput.disabled = true;
-    this.inputs.minutesInput.disabled = true;
-    this.inputs.secondsInput.disabled = true;
+    disableElement(this.inputs.hoursInput);
+    disableElement(this.inputs.minutesInput);
+    disableElement(this.inputs.secondsInput);
   }
 }
 

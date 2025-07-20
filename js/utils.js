@@ -14,6 +14,22 @@ export function hideElement(element) {
   element.classList.add("d-none");
 }
 
+export function enableElement(element) {
+  if (!(element instanceof Element)) {
+    throw new TypeError("Parameter must be a DOM element.");
+  }
+
+  element.disabled = false;
+}
+
+export function disableElement(element) {
+  if (!(element instanceof Element)) {
+    throw new TypeError("Parameter must be a DOM element.");
+  }
+
+  element.disabled = true;
+}
+
 export function toggleClass(element, className) {
   if (!(element instanceof Element)) {
     throw new TypeError("Parameter must be a DOM element.");
