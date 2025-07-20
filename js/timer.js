@@ -23,18 +23,21 @@ export class Timer {
 
     const { SECONDS_IN_HOUR, SECONDS_IN_MINUTE, MAX_HOURS, INITIAL_DURATION } = constants;
 
-    const hours = parseAndClamp(hoursInput.value, MAX_HOURS);
-    const minutes = parseAndClamp(minutesInput.value, 59);
-    const seconds = parseAndClamp(secondsInput.value, 59);
+    let hours = Math.max(parseAndClamp(hoursInput.value, MAX_HOURS), 0);
+    const minutes = Math.max(parseAndClamp(minutesInput.value, 59), 0);
+    const seconds = Math.max(parseAndClamp(secondsInput.value, 59), constants.INITIAL_DURATION);
 
     let total = hours * SECONDS_IN_HOUR + minutes * SECONDS_IN_MINUTE + seconds;
 
-    if (total === 0) {
+    if (total <= 0) {
       total = INITIAL_DURATION;
     }
 
     this.originalDuration = Math.min(total, MAX_HOURS * SECONDS_IN_HOUR);
     this.remainingTime = this.originalDuration;
+    this.inputs.hoursInput.value = String(hours);
+    this.inputs.minutesInput.value = String(minutes);
+    this.inputs.secondsInput.value = String(seconds);
     this.updateDisplay();
   }
 
