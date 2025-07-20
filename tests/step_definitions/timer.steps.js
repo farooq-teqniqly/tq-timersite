@@ -2,20 +2,22 @@ const { Given, When, Then, BeforeAll, AfterAll } = require("@cucumber/cucumber")
 const assert = require("assert");
 const puppeteer = require("puppeteer");
 const { TEST_CONFIG, SELECTORS } = require("../constants.js");
-const { isVisible, getTextContent, getProperty, isEnabled } = require("../utils");
+
+const {
+  isVisible,
+  getProperty,
+  isEnabled,
+  clickButton,
+  getElementHandle,
+  getTimerDisplayText,
+  waitFor,
+} = require("../utils");
 
 let browser, page;
 const { LOCAL_URL } = TEST_CONFIG;
 
-const {
-  START_BUTTON,
-  PAUSE_BUTTON,
-  RESET_BUTTON,
-  TIMER_DISPLAY,
-  HOURS_INPUT,
-  MINUTES_INPUT,
-  SECONDS_INPUT,
-} = SELECTORS;
+const { START_BUTTON, PAUSE_BUTTON, RESET_BUTTON, HOURS_INPUT, MINUTES_INPUT, SECONDS_INPUT } =
+  SELECTORS;
 
 BeforeAll(async function () {
   browser = await puppeteer.launch();
@@ -31,13 +33,14 @@ Given("I open the timer app", async function () {
 });
 
 When("I click the start button", async function () {
-  await page.locator(START_BUTTON).click();
+  await clickButton(START_BUTTON, page);
 });
 
 Then("the timer should count down by at least 1 second", async function () {
-  const initialText = await getTextContent(TIMER_DISPLAY, page);
-  await new Promise((resolve) => setTimeout(resolve, 1500));
-  const afterText = await getTextContent(TIMER_DISPLAY, page);
+  const initialText = await getTimerDisplayText(page);
+  await waitFor(1500);
+  const afterText = await getTimerDisplayText(page);
+
   assert.notStrictEqual(afterText, initialText);
 });
 
@@ -60,13 +63,14 @@ Then("the reset button should be visible", async function () {
 });
 
 When("I click the pause button", async function () {
-  await page.locator(PAUSE_BUTTON).click();
+  await clickButton(PAUSE_BUTTON, page);
 });
 
 Then("the timer should not change after 2 seconds", async function () {
-  const timeBefore = await getTextContent(TIMER_DISPLAY, page);
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-  const timeAfter = await getTextContent(TIMER_DISPLAY, page);
+  const timeBefore = await getTimerDisplayText(page);
+  await waitFor(2000);
+  const timeAfter = await getTimerDisplayText(page);
+
   assert.strictEqual(timeBefore, timeAfter, "Timer should not change when paused");
 });
 
@@ -83,7 +87,7 @@ Then("the start button should be visible", async function () {
 });
 
 When("I click the reset button", async function () {
-  await page.locator(RESET_BUTTON).click();
+  await clickButton(RESET_BUTTON, page);
 });
 
 Then("the reset button should not be visible", async function () {
@@ -93,13 +97,13 @@ Then("the reset button should not be visible", async function () {
 });
 
 Then("the timer display should show {string}", async (expected) => {
-  const text = await getTextContent(TIMER_DISPLAY, page);
+  const text = await getTimerDisplayText(page);
 
   assert.strictEqual(text, expected);
 });
 
 Then("the hours input should be enabled and show {string}", async function (expected) {
-  const hoursInput = await page.$(HOURS_INPUT);
+  const hoursInput = await getElementHandle(HOURS_INPUT, page);
   const enabled = await isEnabled(hoursInput);
   const inputValue = await getProperty(hoursInput, "value");
 
@@ -108,7 +112,7 @@ Then("the hours input should be enabled and show {string}", async function (expe
 });
 
 Then("the minutes input should be enabled and show {string}", async function (expected) {
-  const minutesInput = await page.$(MINUTES_INPUT);
+  const minutesInput = await getElementHandle(MINUTES_INPUT, page);
   const enabled = await isEnabled(minutesInput);
   const inputValue = await getProperty(minutesInput, "value");
 
@@ -117,10 +121,31 @@ Then("the minutes input should be enabled and show {string}", async function (ex
 });
 
 Then("the seconds input should be enabled and show {string}", async function (expected) {
-  const secondsInput = await page.$(SECONDS_INPUT);
+  const secondsInput = await getElementHandle(SECONDS_INPUT, page);
   const enabled = await isEnabled(secondsInput);
   const inputValue = await getProperty(secondsInput, "value");
 
   assert.strictEqual(enabled, true, "Seconds input should be enabled");
   assert.strictEqual(inputValue, expected, "Seconds input should show correct value");
+});
+
+Then("the hours input should be disabled", async function () {
+  const hoursInput = await getElementHandle(HOURS_INPUT, page);
+  const enabled = await isEnabled(hoursInput);
+
+  assert.strictEqual(enabled, false, "Hours input should be disabled");
+});
+
+Then("the minutes input should be disabled", async function () {
+  const minutesInput = await getElementHandle(MINUTES_INPUT, page);
+  const enabled = await isEnabled(minutesInput);
+
+  assert.strictEqual(enabled, false, "Minutes input should be disabled");
+});
+
+Then("the seconds input should be disabled", async function () {
+  const secondsInput = await getElementHandle(SECONDS_INPUT, page);
+  const enabled = await isEnabled(secondsInput);
+
+  assert.strictEqual(enabled, false, "Seconds input should be disabled");
 });

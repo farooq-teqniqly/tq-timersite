@@ -1,10 +1,14 @@
+const { SELECTORS } = require("./constants");
+
+const { TIMER_DISPLAY } = SELECTORS;
+
 const isVisible = async (selector, page) => {
   if (!selector || typeof selector !== "string") {
     throw new TypeError("selector must be a string.");
   }
 
-  if (!page || typeof page !== "object") {
-    throw new TypeError("page must be an object.");
+  if (!page || typeof page.locator !== "function") {
+    throw new TypeError("page must be a Puppeteer Page.");
   }
 
   return await page
@@ -45,4 +49,47 @@ const isEnabled = async (elementHandle) => {
   return !(await getProperty(elementHandle, "disabled"));
 };
 
-module.exports = { isVisible, getTextContent, getProperty, isEnabled };
+const clickButton = async (selector, page) => {
+  if (!selector || typeof selector !== "string") {
+    throw new TypeError("selector must be a string.");
+  }
+
+  if (!page || typeof page.locator !== "function") {
+    throw new TypeError("page must be a Puppeteer Page.");
+  }
+
+  await page.locator(selector).click();
+};
+
+const getElementHandle = async (selector, page) => {
+  if (!selector || typeof selector !== "string") {
+    throw new TypeError("selector must be a string.");
+  }
+
+  if (!page || typeof page.locator !== "function") {
+    throw new TypeError("page must be a Puppeteer Page.");
+  }
+
+  return await page.$(selector);
+};
+
+const getTimerDisplayText = async (page) => {
+  if (!page || typeof page.locator !== "function") {
+    throw new TypeError("page must be a Puppeteer Page.");
+  }
+
+  return await getTextContent(TIMER_DISPLAY, page);
+};
+
+const waitFor = async (delay) => new Promise((resolve) => setTimeout(resolve, delay));
+
+module.exports = {
+  isVisible,
+  getTextContent,
+  getProperty,
+  isEnabled,
+  clickButton,
+  getElementHandle,
+  getTimerDisplayText,
+  waitFor,
+};

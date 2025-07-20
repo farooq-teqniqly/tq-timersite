@@ -11,6 +11,9 @@ Feature: Timer countdown
     Given I open the timer app
     When I click the start button
     Then the timer should count down by at least 1 second
+    And the hours input should be disabled
+    And the minutes input should be disabled
+    And the seconds input should be disabled
 
   Scenario: Start button hides, Pause and Reset buttons show
     Given I open the timer app
