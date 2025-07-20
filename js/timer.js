@@ -17,9 +17,13 @@ export class Timer {
 
   setInitialDuration() {
     const { hoursInput, minutesInput, secondsInput } = this.inputs;
-    const hours = Math.min(parseInt(hoursInput.value, 10) || 0, 5);
-    const minutes = Math.min(parseInt(minutesInput.value, 10) || 0, 59);
-    const seconds = Math.min(parseInt(secondsInput.value, 10) || 0, 59);
+
+    const parseAndClamp = (value, max) => Math.min(parseInt(value, 10) || 0, max);
+
+    const hours = parseAndClamp(hoursInput.value, 5);
+    const minutes = parseAndClamp(minutesInput.value, 59);
+    const seconds = parseAndClamp(secondsInput.value, 59);
+
     let total = hours * 3600 + minutes * 60 + seconds;
 
     if (total === 0) {
