@@ -20,7 +20,7 @@ const { START_BUTTON, PAUSE_BUTTON, RESET_BUTTON, HOURS_INPUT, MINUTES_INPUT, SE
   SELECTORS;
 
 BeforeAll(async function () {
-  browser = await puppeteer.launch();
+  browser = await puppeteer.launch({ args: ["--no-sandbox"] });
   page = await browser.newPage();
 });
 
