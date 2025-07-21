@@ -26,7 +26,7 @@ export class Timer {
 
     let hours = Math.max(parseAndClamp(hoursInput.value, MAX_HOURS), 0);
     const minutes = Math.max(parseAndClamp(minutesInput.value, 59), 0);
-    const seconds = Math.max(parseAndClamp(secondsInput.value, 59), constants.INITIAL_DURATION);
+    const seconds = Math.max(parseAndClamp(secondsInput.value, 59), 0);
 
     let total = hours * SECONDS_IN_HOUR + minutes * SECONDS_IN_MINUTE + seconds;
 

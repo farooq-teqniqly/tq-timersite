@@ -6,6 +6,13 @@ Feature: Timer countdown
     And the minutes input should be enabled and show "0"
     And the seconds input should be enabled and show "30"
 
+  Scenario: Custom timer duration is correctly set
+    Given I open the timer app
+    When I set the minutes input to "2"
+    And I set the seconds input to "15"
+    And I click the start button
+    Then the timer display should show "00:02:15"
+    And the progress bar should be at 100%
 
   Scenario: Start the timer and let it count down for a few seconds
     Given I open the timer app
