@@ -40,3 +40,16 @@ Feature: Timer countdown
     And the start button should be visible
     And the pause button should not be visible
     And the reset button should not be visible
+
+  Scenario: Progress bar indicates countdown status
+    Given I open the timer app
+    Then the progress bar should be at 100%
+    When I click the start button
+    Then the progress bar should start decreasing
+    And the progress bar should visually represent the remaining time
+    When I click the pause button
+    Then the progress bar should stop updating
+    When I click the start button
+    Then the progress bar should continue decreasing
+    When I click the reset button
+    Then the progress bar should reset to 100%

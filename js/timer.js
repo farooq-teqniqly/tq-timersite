@@ -7,6 +7,7 @@ export class Timer {
     this.display = display;
     this.buttons = buttons;
     this.inputs = inputs;
+    this.progressBar = document.getElementById("timerProgressBar");
 
     this.originalDuration = 30;
     this.remainingTime = 30;
@@ -43,6 +44,17 @@ export class Timer {
 
   updateDisplay() {
     this.display.textContent = formatTime(this.remainingTime);
+    this.updateProgressBar();
+  }
+
+  updateProgressBar() {
+    const progressPercentage =
+      this.remainingTime > 0 && this.originalDuration > 0
+        ? Math.floor((this.remainingTime / this.originalDuration) * 100)
+        : 0;
+
+    this.progressBar.style.width = `${progressPercentage}%`;
+    this.progressBar.setAttribute("aria-valuenow", String(progressPercentage));
   }
 
   start() {

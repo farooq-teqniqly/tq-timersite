@@ -10,6 +10,7 @@ const SELECTORS = {
   HOURS_INPUT: "#hoursInput",
   MINUTES_INPUT: "#minutesInput",
   SECONDS_INPUT: "#secondsInput",
+  PROGRESS_BAR: "#timerProgressBar",
 };
 
 module.exports = { TEST_CONFIG, SELECTORS };

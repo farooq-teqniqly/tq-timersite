@@ -1,6 +1,6 @@
 const { SELECTORS } = require("./constants");
 
-const { TIMER_DISPLAY } = SELECTORS;
+const { TIMER_DISPLAY, PROGRESS_BAR } = SELECTORS;
 
 const isVisible = async (selector, page) => {
   if (!selector || typeof selector !== "string") {
@@ -83,6 +83,24 @@ const getTimerDisplayText = async (page) => {
 
 const waitFor = async (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 
+const getProgressBarWidth = async (page) => {
+  if (!page || typeof page.locator !== "function") {
+    throw new TypeError("page must be a Puppeteer Page.");
+  }
+
+  const progressBar = await page.$(PROGRESS_BAR);
+  return await progressBar.evaluate((el) => el.style.width);
+};
+
+const getProgressBarValueNow = async (page) => {
+  if (!page || typeof page.locator !== "function") {
+    throw new TypeError("page must be a Puppeteer Page.");
+  }
+
+  const progressBar = await page.$(PROGRESS_BAR);
+  return await progressBar.evaluate((el) => el.getAttribute("aria-valuenow"));
+};
+
 module.exports = {
   isVisible,
   getTextContent,
@@ -92,4 +110,6 @@ module.exports = {
   getElementHandle,
   getTimerDisplayText,
   waitFor,
+  getProgressBarWidth,
+  getProgressBarValueNow,
 };
