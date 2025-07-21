@@ -109,7 +109,6 @@ This project uses Husky to install Git hooks that run automatically before each 
 
 If any checks fail, the commit will be blocked until you fix the issues.
 
-
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
 3. Commit your changes following Conventional Commits format
