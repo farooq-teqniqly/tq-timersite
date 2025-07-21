@@ -35,6 +35,9 @@ jobs:
       - name: Format
         run: npm run format -- --check
 
+      - name: Start server
+        run: npm run start-ci
+
       - name: Acceptance tests
         run: npm run test:acceptance
 

@@ -8,6 +8,7 @@
     "test:acceptance": "cucumber-js --require tests/**/*.steps.js tests/features",
     "format": "prettier --write .",
     "start-dev": "http-server . -c-1",
+    "start-ci": "http-server . -c-1",
     "lint": "eslint js --config eslint.config.mjs",
     "lint:fix": "eslint js --config eslint.config.mjs --fix",
     "prepare": "husky install"
