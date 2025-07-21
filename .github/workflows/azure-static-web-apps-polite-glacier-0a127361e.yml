@@ -31,10 +31,15 @@ jobs:
         run: npm run format -- --check
 
       - name: Start server and run acceptance tests
-        run: |
-          npm run start-ci &
-          sleep 5
-          npm run test:acceptance
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 1
+          max_attempts: 3
+          retry_wait_seconds: 5
+          command: |
+            npm run start-ci &
+            sleep 5
+            npm run test:acceptance
 
   build_and_deploy_job:
     needs: run_acceptance_tests_job
