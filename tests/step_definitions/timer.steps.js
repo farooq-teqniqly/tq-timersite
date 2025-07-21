@@ -11,6 +11,8 @@ const {
   getElementHandle,
   getTimerDisplayText,
   waitFor,
+  getProgressBarWidth,
+  getProgressBarValueNow,
 } = require("../utils");
 
 let browser, page;
@@ -148,4 +150,80 @@ Then("the seconds input should be disabled", async function () {
   const enabled = await isEnabled(secondsInput);
 
   assert.strictEqual(enabled, false, "Seconds input should be disabled");
+});
+
+Then("the progress bar should be at {int}%", async function (percentage) {
+  const width = await getProgressBarWidth(page);
+  const valuenow = await getProgressBarValueNow(page);
+
+  assert.strictEqual(width, `${percentage}%`, `Progress bar width should be ${percentage}%`);
+  assert.strictEqual(
+    valuenow,
+    String(percentage),
+    `Progress bar aria-valuenow should be ${percentage}`
+  );
+});
+
+Then("the progress bar should start decreasing", async function () {
+  const initialWidth = await getProgressBarWidth(page);
+  await waitFor(1500); // Wait for the timer to update
+  const newWidth = await getProgressBarWidth(page);
+
+  // Extract numeric values from percentages for comparison
+  const initialValue = parseInt(initialWidth, 10);
+  const newValue = parseInt(newWidth, 10);
+
+  assert.ok(newValue < initialValue, "Progress bar should decrease");
+});
+
+Then("the progress bar should visually represent the remaining time", async function () {
+  // Get timer display time in seconds
+  const displayText = await getTimerDisplayText(page);
+  const [hours, minutes, seconds] = displayText.split(":").map((num) => parseInt(num, 10));
+  const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+
+  // Initial duration is 30 seconds by default
+  const initialDuration = 30;
+  const expectedPercentage = Math.floor((totalSeconds / initialDuration) * 100);
+
+  // Allow small difference due to timing of test execution
+  const actualWidth = parseInt((await getProgressBarWidth(page)).replace("%", ""), 10);
+  const difference = Math.abs(actualWidth - expectedPercentage);
+
+  assert.ok(
+    difference <= 5,
+    `Progress bar percentage (${actualWidth}%) should be close to expected (${expectedPercentage}%)`
+  );
+});
+
+Then("the progress bar should stop updating", async function () {
+  const initialWidth = await getProgressBarWidth(page);
+  await waitFor(1500); // Wait to confirm no change
+  const newWidth = await getProgressBarWidth(page);
+
+  assert.strictEqual(initialWidth, newWidth, "Progress bar should not change when paused");
+});
+
+Then("the progress bar should continue decreasing", async function () {
+  const initialWidth = await getProgressBarWidth(page);
+  await waitFor(1500); // Wait for the timer to update
+  const newWidth = await getProgressBarWidth(page);
+
+  // Extract numeric values from percentages for comparison
+  const initialValue = parseInt(initialWidth, 10);
+  const newValue = parseInt(newWidth, 10);
+
+  assert.ok(newValue < initialValue, "Progress bar should continue decreasing");
+});
+
+Then("the progress bar should reset to {int}%", async function (percentage) {
+  const width = await getProgressBarWidth(page);
+  const valuenow = await getProgressBarValueNow(page);
+
+  assert.strictEqual(width, `${percentage}%`, `Progress bar width should be ${percentage}%`);
+  assert.strictEqual(
+    valuenow,
+    String(percentage),
+    `Progress bar aria-valuenow should be ${percentage}`
+  );
 });
