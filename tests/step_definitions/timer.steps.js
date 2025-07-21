@@ -16,7 +16,7 @@ const {
 } = require("../utils");
 
 let browser, page;
-const { LOCAL_URL } = TEST_CONFIG;
+const { LOCAL_URL, DELAY } = TEST_CONFIG;
 
 const { START_BUTTON, PAUSE_BUTTON, RESET_BUTTON, HOURS_INPUT, MINUTES_INPUT, SECONDS_INPUT } =
   SELECTORS;
@@ -58,7 +58,7 @@ When("I click the start button", async function () {
 
 Then("the timer should count down by at least 1 second", async function () {
   const initialText = await getTimerDisplayText(page);
-  await waitFor(1500);
+  await waitFor(DELAY);
   const afterText = await getTimerDisplayText(page);
 
   assert.notStrictEqual(afterText, initialText);
@@ -184,10 +184,9 @@ Then("the progress bar should be at {int}%", async function (percentage) {
 
 Then("the progress bar should start decreasing", async function () {
   const initialWidth = await getProgressBarWidth(page);
-  await waitFor(1500); // Wait for the timer to update
+  await waitFor(DELAY);
   const newWidth = await getProgressBarWidth(page);
 
-  // Extract numeric values from percentages for comparison
   const initialValue = parseInt(initialWidth, 10);
   const newValue = parseInt(newWidth, 10);
 
@@ -195,16 +194,13 @@ Then("the progress bar should start decreasing", async function () {
 });
 
 Then("the progress bar should visually represent the remaining time", async function () {
-  // Get timer display time in seconds
   const displayText = await getTimerDisplayText(page);
   const [hours, minutes, seconds] = displayText.split(":").map((num) => parseInt(num, 10));
   const totalSeconds = hours * 3600 + minutes * 60 + seconds;
 
-  // Initial duration is 30 seconds by default
   const initialDuration = 30;
   const expectedPercentage = Math.floor((totalSeconds / initialDuration) * 100);
 
-  // Allow small difference due to timing of test execution
   const actualWidth = parseInt((await getProgressBarWidth(page)).replace("%", ""), 10);
   const difference = Math.abs(actualWidth - expectedPercentage);
 
@@ -216,7 +212,7 @@ Then("the progress bar should visually represent the remaining time", async func
 
 Then("the progress bar should stop updating", async function () {
   const initialWidth = await getProgressBarWidth(page);
-  await waitFor(1500); // Wait to confirm no change
+  await waitFor(DELAY); // Wait to confirm no change
   const newWidth = await getProgressBarWidth(page);
 
   assert.strictEqual(initialWidth, newWidth, "Progress bar should not change when paused");
@@ -224,10 +220,9 @@ Then("the progress bar should stop updating", async function () {
 
 Then("the progress bar should continue decreasing", async function () {
   const initialWidth = await getProgressBarWidth(page);
-  await waitFor(1500); // Wait for the timer to update
+  await waitFor(DELAY);
   const newWidth = await getProgressBarWidth(page);
 
-  // Extract numeric values from percentages for comparison
   const initialValue = parseInt(initialWidth, 10);
   const newValue = parseInt(newWidth, 10);
 

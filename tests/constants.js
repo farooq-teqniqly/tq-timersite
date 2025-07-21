@@ -1,5 +1,6 @@
 const TEST_CONFIG = {
   LOCAL_URL: "http://localhost:8080",
+  DELAY: 1500,
 };
 
 const SELECTORS = {
