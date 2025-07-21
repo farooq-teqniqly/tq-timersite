@@ -13,7 +13,7 @@ A lightweight, responsive countdown timer web application built with vanilla Jav
 
 ## Demo
 
-The application is deployed on Azure Static Web Apps at: [https://polite-glacier-0a127361e.azurestaticapps.net](https://polite-glacier-0a127361e.azurestaticapps.net)
+The application is deployed on Azure Static Web Apps at: [https://polite-glacier-0a127361e.2.azurestaticapps.net](https://polite-glacier-0a127361e.2.azurestaticapps.net)
 
 ## Getting Started
 
