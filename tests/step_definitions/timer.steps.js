@@ -34,6 +34,24 @@ Given("I open the timer app", async function () {
   await page.goto(LOCAL_URL);
 });
 
+When("I set the hours input to {string}", async function (value) {
+  await page.focus(HOURS_INPUT);
+  await page.evaluate((selector) => (document.querySelector(selector).value = ""), HOURS_INPUT);
+  await page.type(HOURS_INPUT, value);
+});
+
+When("I set the minutes input to {string}", async function (value) {
+  await page.focus(MINUTES_INPUT);
+  await page.evaluate((selector) => (document.querySelector(selector).value = ""), MINUTES_INPUT);
+  await page.type(MINUTES_INPUT, value);
+});
+
+When("I set the seconds input to {string}", async function (value) {
+  await page.focus(SECONDS_INPUT);
+  await page.evaluate((selector) => (document.querySelector(selector).value = ""), SECONDS_INPUT);
+  await page.type(SECONDS_INPUT, value);
+});
+
 When("I click the start button", async function () {
   await clickButton(START_BUTTON, page);
 });
